@@ -20,7 +20,7 @@
         <form action="/" method="post">
             <h2>Match Details</h2>
 
-            <div>
+            <div class="form-field">
                 <label for="match_date">Match Date</label>
                 <input type="date"
                 id="match_date"
@@ -29,7 +29,7 @@
                 required>
             </div>
 
-            <div>
+            <div class="form-field">
                 <label for="team">Team</label>
                 <select id="team" name="team" required>
                     <option value="" disabled selected hidden>M1 W1 M2 W2 etc.</option>
@@ -38,7 +38,7 @@
                 </select>
             </div>
 
-            <div>
+            <div class="form-field">
                 <label for="opponent">Opponent</label>
                 <input type="text"
                 id="opponent"
@@ -49,7 +49,7 @@
                 <small id="opponent_help" class="form-help">Please enter team name exactly as it appears on GMS or the league website</small>
             </div>
 
-            <div>
+            <div class="form-field">
                 <label for="venue">Venue</label>
                 <select id="venue" name="venue" required>
                     <option value="" disabled selected hidden>Home / Away</option>
@@ -58,7 +58,7 @@
                 </select>
             </div>
 
-            <div>
+            <div class="form-field">
                 <label for="scored">Goals Scored</label>
                 <input type="number"
                 id="scored"
@@ -68,7 +68,7 @@
                 required>
             </div>
 
-            <div>
+            <div class="form-field">
                 <label for="conceded">Goals Conceded</label>
                 <input type="number"
                 id="conceded"
@@ -78,7 +78,7 @@
                 required>
             </div>
 
-            <div>
+            <div class="form-field">
                 <button type="submit">Submit</button>
             </div>
         </form>

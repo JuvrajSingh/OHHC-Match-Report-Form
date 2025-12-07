@@ -1,3 +1,8 @@
+/* adds spacing between each question within form */
+.form-field {
+    margin-bottom: 20px; /* space between form sections */
+}
+
 /* turns label into block element and styles it to look like h3 */
 label {
     display: block;
@@ -17,8 +22,8 @@ select option {
 
 /* styling form question sublabel */
 .form-help {
-    display: block;      /* makes it appear on its own line */
-    font-size: 0.85em;   /* smaller text */
-    color: #666;         /* gray, subtle */
-    margin-top: 2px;     /* a bit of spacing from the input */
+    display: block;
+    font-size: 0.85em;
+    color: #222;
+    margin-top: 2px;
 }
