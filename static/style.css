@@ -1,0 +1,24 @@
+/* turns label into block element and styles it to look like h3 */
+label {
+    display: block;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+/* on dropdown list: displays placeholder as grey,
+and makes real options black (some browsers need this manual override) */
+select:required:invalid {
+    color: #999;
+}
+select option {
+    color: #000;
+}
+
+/* styling form question sublabel */
+.form-help {
+    display: block;      /* makes it appear on its own line */
+    font-size: 0.85em;   /* smaller text */
+    color: #666;         /* gray, subtle */
+    margin-top: 2px;     /* a bit of spacing from the input */
+}
