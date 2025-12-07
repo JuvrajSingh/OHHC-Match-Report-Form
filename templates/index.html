@@ -15,74 +15,79 @@
     </head>
 
     <body>
-        <h1>Match Report Form</h1>
+        <div class="page-container">
 
-        <form action="/" method="post">
-            <h2>Match Details</h2>
 
-            <div class="form-field">
-                <label for="match_date">Match Date</label>
-                <input type="date"
-                id="match_date"
-                name="match_date"
-                min="2024-01-01"
-                required>
-            </div>
+            <h1>Match Report Form</h1>
 
-            <div class="form-field">
-                <label for="team">Team</label>
-                <select id="team" name="team" required>
-                    <option value="" disabled selected hidden>M1 W1 M2 W2 etc.</option>
-                    <option value="M1">M1</option>
-                    <option value="M2">M2</option>
-                </select>
-            </div>
+            <form action="/" method="post">
+                <h2>Match Details</h2>
 
-            <div class="form-field">
-                <label for="opponent">Opponent</label>
-                <input type="text"
-                id="opponent"
-                name="opponent"
-                placeholder="St Albans M2"
-                required
-                aria-describedby="opponent_help">
-                <small id="opponent_help" class="form-help">Please enter team name exactly as it appears on GMS or the league website</small>
-            </div>
+                <div class="form-field">
+                    <label for="match_date">Match Date</label>
+                    <input type="date"
+                    id="match_date"
+                    name="match_date"
+                    min="2024-01-01"
+                    required>
+                </div>
 
-            <div class="form-field">
-                <label for="venue">Venue</label>
-                <select id="venue" name="venue" required>
-                    <option value="" disabled selected hidden>Home / Away</option>
-                    <option value="Home">Home</option>
-                    <option value="Away">Away</option>
-                </select>
-            </div>
+                <div class="form-field">
+                    <label for="team">Team</label>
+                    <select id="team" name="team" required>
+                        <option value="" disabled selected hidden>M1 W1 M2 W2 etc.</option>
+                        <option value="M1">M1</option>
+                        <option value="M2">M2</option>
+                    </select>
+                </div>
 
-            <div class="form-field">
-                <label for="scored">Goals Scored</label>
-                <input type="number"
-                id="scored"
-                name="goals_scored"
-                placeholder="e.g. 2"
-                min="0"
-                required>
-            </div>
+                <div class="form-field">
+                    <label for="opponent">Opponent</label>
+                    <input type="text"
+                    id="opponent"
+                    name="opponent"
+                    placeholder="St Albans M2"
+                    required
+                    aria-describedby="opponent_help">
+                    <small id="opponent_help" class="form-help">Please enter team name exactly as it appears on GMS or the league website</small>
+                </div>
 
-            <div class="form-field">
-                <label for="conceded">Goals Conceded</label>
-                <input type="number"
-                id="conceded"
-                name="goals_conceded"
-                placeholder="e.g. 1"
-                min="0"
-                required>
-            </div>
+                <div class="form-field">
+                    <label for="venue">Venue</label>
+                    <select id="venue" name="venue" required>
+                        <option value="" disabled selected hidden>Home / Away</option>
+                        <option value="Home">Home</option>
+                        <option value="Away">Away</option>
+                    </select>
+                </div>
 
-            <div class="form-field">
-                <button type="submit">Submit</button>
-            </div>
-        </form>
+                <div class="form-field">
+                    <label for="scored">Goals Scored</label>
+                    <input type="number"
+                    id="scored"
+                    name="goals_scored"
+                    placeholder="e.g. 2"
+                    min="0"
+                    required>
+                </div>
 
+                <div class="form-field">
+                    <label for="conceded">Goals Conceded</label>
+                    <input type="number"
+                    id="conceded"
+                    name="goals_conceded"
+                    placeholder="e.g. 1"
+                    min="0"
+                    required>
+                </div>
+
+                <div class="form-field">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+
+            
+        </div>
     </body>
 
 </html>

@@ -1,3 +1,17 @@
+/* responsive centred form container */
+.page-container {
+    max-width: 600px;
+    margin: 0 auto;        /* center horizontally */
+    padding: 20px;
+    box-sizing: border-box; /* include padding in width */
+}
+@media (max-width: 600px) {
+    .page-container {
+        width: 90%;
+        padding: 10px;
+    }
+}
+
 /* adds spacing between each question within form */
 .form-field {
     margin-bottom: 20px; /* space between form sections */
