@@ -3,6 +3,8 @@ import gspread
 from google.oauth2.service_account import Credentials
 import os
 
+from models import get_next_id
+
 app = Flask(__name__)
 
 # Setup for Google Sheets
@@ -23,7 +25,7 @@ appearances_sheet = sh.worksheet("Appearances")
 def index():
     # If user submits form
     if request.method == "POST":
-        match_id = 1 # match_id TO DO
+        match_id = get_next_id(matches_sheet, "M")
         match_date = request.form.get("match_date")
         team = request.form.get("team")
         opponent = request.form.get("opponent")
@@ -38,8 +40,7 @@ def index():
             if not column:
                 return render_template("index.html") # TO CHANGE
         
-        matches_sheet.append_row(matches_new_row)
-
+        matches_sheet.append_row(matches_new_row, value_input_option='USER_ENTERED')
         return render_template("index.html") # TO CHANGE
     
     # If user opens form
