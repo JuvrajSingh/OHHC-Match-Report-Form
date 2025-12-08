@@ -18,7 +18,10 @@
         <div class="page-container">
 
 
-            <h1>Match Report Form</h1>
+            <h1>OHHC Match Report Form</h1>
+            <p>Use this form to update the Club Statistics database. Only click submit once you've double checked all details are correct.</p>
+
+            <hr>
 
             <form action="/" method="post">
                 <h2>Match Details</h2>
@@ -81,13 +84,55 @@
                     required>
                 </div>
 
+                <hr>
+
+                <h2>Players & Goals</h2>
+
+                <div class="form-field">
+                    <table id="players-table">
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Goals</th>
+                        </tr>
+
+                        {% for i in range(1, 19) %}
+                        <tr>
+                            <td>
+                                <input type="text"
+                                name="player_{{ i }}"
+                                class="player-input"
+                                autocomplete="off"
+                                data-row="{{ i }}"
+                                {% if i <= 7 %} required {% endif %}>
+
+                                <!-- Hidden field to store player_id -->
+                                <input type="hidden" name="player_id_{{ i }}" class="player_id_field">
+
+                                <!-- this div lets JS show a dropdown exactly under the correct field -->
+                                <div class="autocomplete-results" id="results-{{ i }}"></div>
+                            </td>
+
+                            <td>
+                                <input type="number"
+                                name="goals_{{ i }}"
+                                min="0"
+                                value="0"
+                                {% if i <= 7 %} required {% endif %}>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
                 <div class="form-field">
                     <button type="submit">Submit</button>
                 </div>
             </form>
 
-            
+
         </div>
+        
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
     </body>
 
 </html>
