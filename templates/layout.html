@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+        <title>Match Report: {% block title %}{% endblock %}</title>
+
+    </head>
+
+    <body>
+        <div class="page-container">
+
+            {% block main %}{% endblock %}
+
+        </div>
+        
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    </body>
+
+</html>
