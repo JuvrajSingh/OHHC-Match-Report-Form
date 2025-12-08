@@ -1,3 +1,5 @@
+from flask import render_template
+
 def get_next_id(sheet, prefix: str, column: int=1, min_digits: int=4) -> str:
     """Given a google worksheet with a unique ID column, generates the next auto-incrementing ID"""
     
@@ -14,8 +16,11 @@ def get_next_id(sheet, prefix: str, column: int=1, min_digits: int=4) -> str:
             num = int(last_id[len(prefix):]) + 1
         except ValueError:
             # If last_id doesn't match expected format, show an error
-            # TO DO - return apology message
-            return None
+            message = "Sorry, looks like the most recent entry in the database does not have a valid format in the ID column. Please check the database to make sure that all looks okay, and that nobody has accidently edited anything"
+            return apology(message)
         
     next_id = f"{prefix}{num:0{min_digits}d}"
     return next_id
+
+def apology(message):
+    return render_template("apology.html", message=message)

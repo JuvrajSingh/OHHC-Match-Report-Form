@@ -3,7 +3,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import os
 
-from models import get_next_id
+from models import get_next_id, apology
 
 app = Flask(__name__)
 
@@ -35,10 +35,11 @@ def index():
         goals_against = request.form.get("goals_conceded")
 
         matches_new_row = [match_id, match_date, team, opponent, venue, season, goals_for, goals_against]
+        error_texts = ["Match ID", "Match date", "Team", "Opponent", "Venue", "Season", "Goals Scored", "Goals Conceded"]
 
-        for column in matches_new_row:
+        for column, error_text in zip(matches_new_row, error_texts):
             if not column:
-                return render_template("index.html") # TO CHANGE
+                return apology(f"{error_text} is required")
         
         matches_sheet.append_row(matches_new_row, value_input_option='USER_ENTERED')
 
