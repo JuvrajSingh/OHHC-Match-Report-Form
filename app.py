@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import gspread
 from google.oauth2.service_account import Credentials
 import os
@@ -41,7 +41,10 @@ def index():
                 return render_template("index.html") # TO CHANGE
         
         matches_sheet.append_row(matches_new_row, value_input_option='USER_ENTERED')
-        return render_template("index.html") # TO CHANGE
+
+        # TO DO - populate appearances sheet
+
+        return redirect(url_for("thanks"))
     
     # If user opens form
     return render_template("index.html")
@@ -69,6 +72,15 @@ def autocomplete():
             })
 
     return jsonify(matches[:10]) # limit autocomplete results to 10 names
+
+@app.route("/thanks")
+def thanks():
+    # If user clicks "Submit another match report form" button
+    if request.method == "POST":
+        return redirect("/")
+    
+    # If user reaches page by submitting match report form
+    return render_template("thanks.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

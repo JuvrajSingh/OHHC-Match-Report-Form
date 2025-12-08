@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Submission Complete
+{% endblock %}
+
+{% block main %}
+    <h1>Thank you</h1>
+    <p>Form has been submitted and Club Statistics have updated</p>
+    <form action="/thanks" method="post">
+        <div class="form-field">
+            <button type="submit">Submit another match report form</button>
+        </div>
+    </form>
+{% endblock %}
