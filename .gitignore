@@ -2,3 +2,7 @@ venv/
 __pycache__/
 *.pyc
 credentials.json
+credentials/*.json
+service_account.json
+*.pem
+*.p12

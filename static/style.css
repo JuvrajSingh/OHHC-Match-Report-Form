@@ -41,3 +41,9 @@ select option {
     color: #222;
     margin-top: 2px;
 }
+
+/* styling for autocomplete options matched text */
+.typed {
+  font-weight: bold;
+  background-color: yellow;
+}
