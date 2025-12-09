@@ -82,7 +82,7 @@
                     <th>Goals</th>
                 </tr>
 
-                {% for i in range(1, 19) %}
+                {% for i in range(1, MAX_PLAYERS + 1) %}
                 <tr>
                     <td>
                         <input type="text"
@@ -90,7 +90,7 @@
                         class="player-input"
                         autocomplete="off"
                         data-row="{{ i }}"
-                        {% if i <= 7 %} required {% endif %}>
+                        {% if i <= MIN_PLAYERS %} required {% endif %}>
 
                         <!-- Hidden field to store player_id -->
                         <input type="hidden" name="player_id_{{ i }}" class="player_id_field">
@@ -104,7 +104,7 @@
                         name="goals_{{ i }}"
                         min="0"
                         value="0"
-                        {% if i <= 7 %} required {% endif %}>
+                        {% if i <= MIN_PLAYERS %} required {% endif %}>
                     </td>
                 </tr>
                 {% endfor %}

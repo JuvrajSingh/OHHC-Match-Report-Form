@@ -20,6 +20,9 @@ players_sheet = sh.worksheet("Players")
 matches_sheet = sh.worksheet("Matches")
 appearances_sheet = sh.worksheet("Appearances")
 
+MAX_PLAYERS = 18 # the maximum allowed number of players per side in a match
+MIN_PLAYERS = 7 # the minimum required number of players per side in a match
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -39,16 +42,31 @@ def index():
 
         for column, error_text in zip(matches_new_row, error_texts):
             if not column:
-                return apology(f"{error_text} is required")
+                return apology(f"{error_text} is either blank or invalid")
         
-        matches_sheet.append_row(matches_new_row, value_input_option='USER_ENTERED')
+        matches_sheet.append_row(matches_new_row, value_input_option="USER_ENTERED")
 
-        # TO DO - populate appearances sheet
+        # Add a new row to the appearances sheet per player per match
+        for i in range(1, MAX_PLAYERS + 1):
+            player_name = request.form.get(f"player_{i}")
+            if player_name.strip():
+                appearance_id = get_next_id(appearances_sheet, "A", min_digits=6)
+                # I already have match ID
+                player_id = request.form.get(f"player_id_{i}")
+                player_goals = request.form.get(f"goals_{i}")
+
+                appearances_new_row = [appearance_id, match_id, player_id, player_goals]
+                error_texts_2 = ["Appearannce ID", "Match ID", "Player ID", "Player Goals"]
+
+                for column, error_text in zip(appearances_new_row, error_texts_2):
+                    if not column:
+                        return apology(f"{error_text} is either blank or invalid")
+                appearances_sheet.append_row(appearances_new_row, value_input_option="USER_ENTERED")
 
         return redirect(url_for("thanks"))
     
     # If user opens form
-    return render_template("index.html")
+    return render_template("index.html", MAX_PLAYERS=MAX_PLAYERS, MIN_PLAYERS=MIN_PLAYERS)
 
 @app.route("/autocomplete")
 def autocomplete():
