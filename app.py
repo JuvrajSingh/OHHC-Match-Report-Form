@@ -31,7 +31,7 @@ def index():
         match_id = get_next_id(matches_sheet, "M")
         match_date = request.form.get("match_date")
         team = request.form.get("team")
-        opponent = request.form.get("opponent")
+        opponent = request.form.get("opponent", "").strip()
         venue = request.form.get("venue")
         season = "" # left empty so that arrayformula in this column works
         goals_for = request.form.get("goals_scored")
@@ -48,19 +48,25 @@ def index():
 
         # Add a new row to the appearances sheet per player per match
         for i in range(1, MAX_PLAYERS + 1):
-            player_name = request.form.get(f"player_{i}")
-            if player_name.strip():
+            player_name = request.form.get(f"player_{i}", "").strip()
+            if player_name:
+                player_id = request.form.get(f"player_id_{i}")
+                if not player_id:
+                    return apology(f"Player '{player_name}' is not in the database. Please select from the suggestions")
+                
                 appearance_id = get_next_id(appearances_sheet, "A", min_digits=6)
                 # I already have match ID
-                player_id = request.form.get(f"player_id_{i}")
+                # I already have player ID
                 player_goals = request.form.get(f"goals_{i}")
 
-                appearances_new_row = [appearance_id, match_id, player_id, player_goals]
-                error_texts_2 = ["Appearannce ID", "Match ID", "Player ID", "Player Goals"]
+                appearances_checks = [appearance_id, player_goals]
+                error_texts_2 = ["Appearannce ID", "Player Goals"]
 
-                for column, error_text in zip(appearances_new_row, error_texts_2):
+                for column, error_text in zip(appearances_checks, error_texts_2):
                     if not column:
                         return apology(f"{error_text} is either blank or invalid")
+                
+                appearances_new_row = [appearance_id, match_id, player_id, player_goals]
                 appearances_sheet.append_row(appearances_new_row, value_input_option="USER_ENTERED")
 
         return redirect(url_for("thanks"))
