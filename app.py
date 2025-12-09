@@ -20,6 +20,9 @@ players_sheet = sh.worksheet("Players")
 matches_sheet = sh.worksheet("Matches")
 appearances_sheet = sh.worksheet("Appearances")
 
+records = players_sheet.get_all_records() # Fetch whole sheet once
+players_by_id = {str(records["player_id"]): record["display_name"] for record in records} # build lookup dict
+
 MAX_PLAYERS = 18 # the maximum allowed number of players per side in a match
 MIN_PLAYERS = 7 # the minimum required number of players per side in a match
 
@@ -53,6 +56,9 @@ def index():
                 player_id = request.form.get(f"player_id_{i}")
                 if not player_id:
                     return apology(f"Player '{player_name}' is not in the database. Please select from the suggestions")
+                db_name = players_by_id.get(player_id)
+                if not db_name or db_name != player_name:
+                    return apology(f"Invalid player selection in row {i}.")
                 
                 appearance_id = get_next_id(appearances_sheet, "A", min_digits=6)
                 # I already have match ID
@@ -81,9 +87,6 @@ def autocomplete():
 
     if not query:
         return jsonify([])
-    
-    # Fetch whole sheet once
-    records = players_sheet.get_all_records()
 
     # Filter on display_name, and return JSON array [{id, name, dob}, ...] as JS is expecting
     matches = []
