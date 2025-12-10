@@ -45,5 +45,4 @@ select option {
 /* styling for autocomplete options matched text */
 .typed {
   font-weight: bold;
-  background-color: yellow;
 }
