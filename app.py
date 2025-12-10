@@ -54,6 +54,7 @@ def index():
         appearances_new_rows = []
         appearance_counter = 0
         player_ids = []
+        goals_tally = 0
         for i in range(1, MAX_PLAYERS + 1):
             player_name = request.form.get(f"player_{i}", "").strip()
             if player_name:
@@ -79,9 +80,13 @@ def index():
                 appearances_new_rows.append([appearance_id, match_id, player_id, player_goals])
                 appearance_counter += 1
                 player_ids.append(player_id)
+                goals_tally += int(player_goals)
 
         if len(player_ids) != len(set(player_ids)):
             return apology("A player was selected twice")
+        
+        if int(goals_for) != goals_tally:
+            return apology("Please make sure goals tally up. Sum of goals attributed to each player must equal to goals scored in the match")
 
         matches_sheet.append_row(matches_new_row, value_input_option="USER_ENTERED")
         for row in appearances_new_rows:
