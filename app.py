@@ -8,20 +8,21 @@ from models import get_next_id, apology
 app = Flask(__name__)
 
 # Setup for Google Sheets
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 creds = Credentials.from_service_account_file(
-    os.path.join("credentials", "service_account.json"),
+    os.path.abspath(os.path.join("credentials", "service_account.json")),
     scopes=SCOPES)
 gc = gspread.authorize(creds)
 
-sh = gc.open_by_key("1XuTyJb0PG8OIEHj-UosEqXW0m8mNu3iQUvJUXM8tw1E")
+# sh = gc.open_by_key("1XuTyJb0PG8OIEHj-UosEqXW0m8mNu3iQUvJUXM8tw1E") # LIVE SHEET
+sh = gc.open_by_key("1lRbopWLaEgtoCLzoTgf5OR78_XK5x5mAA1nXwQYjlC8") # TESTER SHEET
 
 players_sheet = sh.worksheet("Players")
 matches_sheet = sh.worksheet("Matches")
 appearances_sheet = sh.worksheet("Appearances")
 
 records = players_sheet.get_all_records() # Fetch whole sheet once
-players_by_id = {str(records["player_id"]): record["display_name"] for record in records} # build lookup dict
+players_by_id = {str(record["player_id"]): record["display_name"] for record in records} # build lookup dict
 
 MAX_PLAYERS = 18 # the maximum allowed number of players per side in a match
 MIN_PLAYERS = 7 # the minimum required number of players per side in a match
@@ -40,16 +41,18 @@ def index():
         goals_for = request.form.get("goals_scored")
         goals_against = request.form.get("goals_conceded")
 
-        matches_new_row = [match_id, match_date, team, opponent, venue, season, goals_for, goals_against]
-        error_texts = ["Match ID", "Match date", "Team", "Opponent", "Venue", "Season", "Goals Scored", "Goals Conceded"]
+        matches_checks = [match_id, match_date, team, opponent, venue, goals_for, goals_against]
+        error_texts = ["Match ID", "Match date", "Team", "Opponent", "Venue", "Goals Scored", "Goals Conceded"]
 
-        for column, error_text in zip(matches_new_row, error_texts):
+        for column, error_text in zip(matches_checks, error_texts):
             if not column:
                 return apology(f"{error_text} is either blank or invalid")
         
-        matches_sheet.append_row(matches_new_row, value_input_option="USER_ENTERED")
+        matches_new_row = [match_id, match_date, team, opponent, venue, season, goals_for, goals_against]
 
         # Add a new row to the appearances sheet per player per match
+        appearances_new_rows = []
+        appearance_counter = 0
         for i in range(1, MAX_PLAYERS + 1):
             player_name = request.form.get(f"player_{i}", "").strip()
             if player_name:
@@ -60,7 +63,7 @@ def index():
                 if not db_name or db_name != player_name:
                     return apology(f"Invalid player selection in row {i}.")
                 
-                appearance_id = get_next_id(appearances_sheet, "A", min_digits=6)
+                appearance_id = get_next_id(appearances_sheet, "A", min_digits=6, counter=appearance_counter)
                 # I already have match ID
                 # I already have player ID
                 player_goals = request.form.get(f"goals_{i}")
@@ -71,9 +74,13 @@ def index():
                 for column, error_text in zip(appearances_checks, error_texts_2):
                     if not column:
                         return apology(f"{error_text} is either blank or invalid")
-                
-                appearances_new_row = [appearance_id, match_id, player_id, player_goals]
-                appearances_sheet.append_row(appearances_new_row, value_input_option="USER_ENTERED")
+
+                appearances_new_rows.append([appearance_id, match_id, player_id, player_goals])
+                appearance_counter += 1
+
+        matches_sheet.append_row(matches_new_row, value_input_option="USER_ENTERED")
+        for row in appearances_new_rows:
+            appearances_sheet.append_row(row, value_input_option="USER_ENTERED")
 
         return redirect(url_for("thanks"))
     
@@ -101,7 +108,7 @@ def autocomplete():
 
     return jsonify(matches[:10]) # limit autocomplete results to 10 names
 
-@app.route("/thanks")
+@app.route("/thanks", methods=["GET", "POST"])
 def thanks():
     # If user clicks "Submit another match report form" button
     if request.method == "POST":
