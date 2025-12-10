@@ -9,6 +9,15 @@ function debounce(fn, wait = 200) {
   };
 }
 
+// return a Set of all currently selected player IDs across all rows
+function getSelectedPlayerIds() {
+  const ids = new Set();
+  document.querySelectorAll('input[type="hidden"][name^="player_id_"]').forEach(h => {
+    if (h.value) ids.add(h.value);
+  });
+  return ids;
+}
+
 // fill hidden player_id and visible name when a suggestion is chosen
 function selectSuggestion(inputEl, row, player) {
   inputEl.value = player.name;                                 // visible name
@@ -26,7 +35,19 @@ function selectSuggestion(inputEl, row, player) {
 // render suggestions array into the results box for a given row
 function renderSuggestions(players, inputEl, boxEl, row) {
   boxEl.innerHTML = ""; // clear previous
-  if (!players || players.length === 0) {
+
+  // ---- NEW: remove players already selected in other rows ----
+  const selected = getSelectedPlayerIds();
+  const currentHidden = document.querySelector(`input[name="player_id_${row}"]`);
+  const currentId = currentHidden ? currentHidden.value : null;
+
+  const filtered = players.filter(p => {
+    // allow the row's own currently selected player
+    if (p.id === currentId) return true;
+    return !selected.has(String(p.id));
+  });
+
+  if (filtered.length === 0) {
     const none = document.createElement("div");
     none.className = "autocomplete-none";
     none.textContent = "No matches";
@@ -34,19 +55,20 @@ function renderSuggestions(players, inputEl, boxEl, row) {
     return;
   }
 
-  players.forEach(player => {
+  filtered.forEach(player => {
     const opt = document.createElement("div");
     opt.className = "autocomplete-option";
     opt.tabIndex = 0;
 
+    // highlight matched substring
     const q = inputEl.value.trim().toLowerCase();
     const nameLower = player.name.toLowerCase();
     const start = nameLower.indexOf(q);
 
     let displayName = player.name;
     if (start !== -1) {
-    const end = start + q.length;
-    displayName =
+      const end = start + q.length;
+      displayName =
         player.name.slice(0, start) +
         `<span class="typed">${player.name.slice(start, end)}</span>` +
         player.name.slice(end);
@@ -56,11 +78,13 @@ function renderSuggestions(players, inputEl, boxEl, row) {
     opt.dataset.playerId = player.id;
     opt.dataset.playerName = player.name;
 
+    // click action
     opt.addEventListener("click", () => {
       selectSuggestion(inputEl, row, player);
       boxEl.innerHTML = "";
     });
 
+    // keyboard Enter action
     opt.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -72,6 +96,7 @@ function renderSuggestions(players, inputEl, boxEl, row) {
     boxEl.appendChild(opt);
   });
 }
+
 
 // keyboard navigation for up/down/enter in suggestion list
 function handleKeyNav(e, inputEl) {
