@@ -160,6 +160,14 @@ function initAutocomplete() {
     }, 180);
 
     input.addEventListener("input", fetchSuggestions);
+    // If name field becomes empty, clear the hidden player_id too
+    input.addEventListener("input", function () {
+    if (this.value.trim() === "") {
+        const row = this.dataset.row;
+        const hidden = document.querySelector(`input[name="player_id_${row}"]`);
+        if (hidden) hidden.value = "";
+    }
+    });
     input.addEventListener("keydown", function (e) { handleKeyNav(e, this); });
   });
 
