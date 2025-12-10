@@ -1,5 +1,12 @@
 /* JS code written by chatgpt */
 
+// sets max attribute of match date in form to today's date
+const dateInput = document.getElementById('match_date');
+if (dateInput) {
+    dateInput.max = new Date().toISOString().split('T')[0];
+}
+
+
 // simple debounce helper
 function debounce(fn, wait = 200) {
   let timer = null;
