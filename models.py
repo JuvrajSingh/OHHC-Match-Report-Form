@@ -1,4 +1,5 @@
-from flask import render_template
+from flask import render_template, request
+from config import MAX_PLAYERS, MIN_PLAYERS
 
 def get_next_id(sheet, prefix: str, column: int=1, min_digits: int=4, counter: int=0) -> str:
     """Given a google worksheet with a unique ID column, generates the next auto-incrementing ID"""
@@ -23,4 +24,4 @@ def get_next_id(sheet, prefix: str, column: int=1, min_digits: int=4, counter: i
     return next_id
 
 def apology(message):
-    return render_template("apology.html", message=message)
+    return render_template("index.html", MAX_PLAYERS=MAX_PLAYERS, MIN_PLAYERS=MIN_PLAYERS, error=message, form=request.form)

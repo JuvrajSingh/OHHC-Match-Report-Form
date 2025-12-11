@@ -4,6 +4,7 @@ from google.oauth2.service_account import Credentials
 import os
 
 from models import get_next_id, apology
+from config import MAX_PLAYERS, MIN_PLAYERS
 
 app = Flask(__name__)
 
@@ -23,9 +24,6 @@ appearances_sheet = sh.worksheet("Appearances")
 
 records = players_sheet.get_all_records() # Fetch whole sheet once
 players_by_id = {str(record["player_id"]): record["display_name"] for record in records} # build lookup dict
-
-MAX_PLAYERS = 18 # the maximum allowed number of players per side in a match
-MIN_PLAYERS = 7 # the minimum required number of players per side in a match
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -95,7 +93,7 @@ def index():
         return redirect(url_for("thanks"))
     
     # If user opens form
-    return render_template("index.html", MAX_PLAYERS=MAX_PLAYERS, MIN_PLAYERS=MIN_PLAYERS)
+    return render_template("index.html", MAX_PLAYERS=MAX_PLAYERS, MIN_PLAYERS=MIN_PLAYERS, form={})
 
 @app.route("/autocomplete")
 def autocomplete():

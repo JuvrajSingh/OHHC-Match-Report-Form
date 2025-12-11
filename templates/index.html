@@ -8,6 +8,8 @@
     <h1>OHHC Match Report Form</h1>
     <p>Use this form to update the Club Statistics database. Only click submit once you've double checked all details are correct.</p>
 
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
     <hr>
 
     <form action="/" method="post">
@@ -19,15 +21,19 @@
             id="match_date"
             name="match_date"
             min="2024-01-01"
-            required>
+            required
+            value="{{ form.match_date }}">
         </div>
 
         <div class="form-field">
             <label for="team">Team</label>
             <select id="team" name="team" required>
-                <option value="" disabled selected hidden>M1 W1 M2 W2 etc.</option>
-                <option value="M1">M1</option>
-                <option value="M2">M2</option>
+                <option value="" disabled hidden
+                    {% if not form.team %}selected{% endif %}>
+                    M1 W1 M2 W2 etc.
+                </option>
+                <option value="M1" {% if form.team == "M1" %}selected{% endif %}>M1</option>
+                <option value="M2" {% if form.team == "M2" %}selected{% endif %}>M2</option>
             </select>
         </div>
 
@@ -38,6 +44,7 @@
             name="opponent"
             placeholder="St Albans M2"
             required
+            value="{{ form.opponent }}"
             aria-describedby="opponent_help">
             <small id="opponent_help" class="form-help">Please enter team name exactly as it appears on GMS or the league website</small>
         </div>
@@ -45,9 +52,12 @@
         <div class="form-field">
             <label for="venue">Venue</label>
             <select id="venue" name="venue" required>
-                <option value="" disabled selected hidden>Home / Away</option>
-                <option value="Home">Home</option>
-                <option value="Away">Away</option>
+                <option value="" disabled hidden
+                    {% if not form.venue %}selected{% endif %}>
+                    Home / Away
+                </option>
+                <option value="Home" {% if form.venue == "Home" %}selected{% endif %}>Home</option>
+                <option value="Away" {% if form.venue == "Away" %}selected{% endif %}>Away</option>
             </select>
         </div>
 
@@ -58,7 +68,8 @@
             name="goals_scored"
             placeholder="e.g. 2"
             min="0"
-            required>
+            required
+            value="{{ form.goals_scored }}">
         </div>
 
         <div class="form-field">
@@ -68,7 +79,8 @@
             name="goals_conceded"
             placeholder="e.g. 1"
             min="0"
-            required>
+            required
+            value="{{ form.goals_conceded }}">
         </div>
 
         <hr>
@@ -85,15 +97,19 @@
                 {% for i in range(1, MAX_PLAYERS + 1) %}
                 <tr>
                     <td>
-                        <input type="text"
+                        <input class="player-input"
+                        type="text"
                         name="player_{{ i }}"
-                        class="player-input"
                         autocomplete="off"
+                        value="{{ form['player_' ~ i] or '' }}"
                         data-row="{{ i }}"
                         {% if i <= MIN_PLAYERS %} required {% endif %}>
 
                         <!-- Hidden field to store player_id -->
-                        <input type="hidden" name="player_id_{{ i }}" class="player_id_field">
+                        <input class="player_id_field"
+                        type="hidden"
+                        name="player_id_{{ i }}"
+                        {% if form['player_id_' ~ i] %}value="{{ form['player_id_' ~ i] }}"{% endif %}>
 
                         <!-- this div lets JS show a dropdown exactly under the correct field -->
                         <div class="autocomplete-results" id="results-{{ i }}"></div>
@@ -103,7 +119,7 @@
                         <input type="number"
                         name="goals_{{ i }}"
                         min="0"
-                        value="0"
+                        value="{{ form['goals_' ~ i] or '0' }}"
                         {% if i <= MIN_PLAYERS %} required {% endif %}>
                     </td>
                 </tr>
