@@ -32,8 +32,9 @@
                     {% if not form.team %}selected{% endif %}>
                     M1 W1 M2 W2 etc.
                 </option>
-                <option value="M1" {% if form.team == "M1" %}selected{% endif %}>M1</option>
-                <option value="M2" {% if form.team == "M2" %}selected{% endif %}>M2</option>
+                {% for TEAM in TEAMS %}
+                    <option value="{{ TEAM }}" {% if form.team == TEAM %}selected{% endif %}>{{ TEAM }}</option>
+                {% endfor %}
             </select>
         </div>
 

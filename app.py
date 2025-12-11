@@ -4,7 +4,7 @@ from google.oauth2.service_account import Credentials
 import os
 
 from models import get_next_id, apology
-from config import MAX_PLAYERS, MIN_PLAYERS
+from config import TEAMS, MAX_PLAYERS, MIN_PLAYERS
 
 app = Flask(__name__)
 
@@ -93,7 +93,7 @@ def index():
         return redirect(url_for("thanks"))
     
     # If user opens form
-    return render_template("index.html", MAX_PLAYERS=MAX_PLAYERS, MIN_PLAYERS=MIN_PLAYERS, form={})
+    return render_template("index.html", TEAMS=TEAMS, MAX_PLAYERS=MAX_PLAYERS, MIN_PLAYERS=MIN_PLAYERS, form={})
 
 @app.route("/autocomplete")
 def autocomplete():
