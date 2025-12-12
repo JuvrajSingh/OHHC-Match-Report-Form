@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Form
+{% endblock %}
+
+{% block main %}
+    <h1>OHHC Match Report Form - WALKOVER</h1>
+    <p>Use this form to update the Club Statistics database. Only click submit once you've double checked all details are correct.</p>
+
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+    <hr>
+
+    <div>
+        <p>This form is only for submitting a walkover result. If match was played, please submit full match report form</p>
+        <a href="{{ url_for('index') }}">
+            <button type="button">Go to full match report form</button>
+        </a>
+    </div>
+
+    <hr>
+
+    <form action="/walkover" method="post">
+        <h2>Match Details</h2>
+
+        <div class="form-field">
+            <label for="match_date">Match Date</label>
+            <input type="date"
+            id="match_date"
+            name="match_date"
+            min="2024-01-01"
+            required
+            value="{{ form.match_date }}">
+        </div>
+
+        <div class="form-field">
+            <label for="team">Team</label>
+            <select id="team" name="team" required>
+                <option value="" disabled hidden
+                    {% if not form.team %}selected{% endif %}>
+                    M1 W1 M2 W2 etc.
+                </option>
+                {% for TEAM in TEAMS %}
+                    <option value="{{ TEAM }}" {% if form.team == TEAM %}selected{% endif %}>{{ TEAM }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="opponent">Opponent</label>
+            <input type="text"
+            id="opponent"
+            name="opponent"
+            placeholder="St Albans M2"
+            required
+            value="{{ form.opponent }}"
+            aria-describedby="opponent_help">
+            <small id="opponent_help" class="form-help">Please enter team name exactly as it appears on GMS or the league website</small>
+        </div>
+
+        <div class="form-field">
+            <label for="venue">Venue</label>
+            <select id="venue" name="venue" required>
+                <option value="" disabled hidden
+                    {% if not form.venue %}selected{% endif %}>
+                    Home / Away
+                </option>
+                <option value="Home" {% if form.venue == "Home" %}selected{% endif %}>Home</option>
+                <option value="Away" {% if form.venue == "Away" %}selected{% endif %}>Away</option>
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="forfeited">Forfeited Team</label>
+            <select id="forfeited" name="forfeited" required>
+                <option value="" disabled hidden
+                    {% if not form.forfeited %}selected{% endif %}>
+                    Select team that has forfeited
+                </option>
+                <option value="Opponent" {% if form.venue == "Opponent" %}selected{% endif %}>Opponent</option>
+                <option value="OHHC" {% if form.venue == "OHHC" %}selected{% endif %}>OHHC</option>
+            </select>
+        </div>
+
+        <div class="form-field">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+{% endblock %}

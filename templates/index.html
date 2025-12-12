@@ -12,6 +12,15 @@
 
     <hr>
 
+    <div>
+        <p>If match was not played due to either team forfeting, please submit walkover form instead</p>
+        <a href="{{ url_for('walkover') }}">
+            <button type="button">Go to walkover form</button>
+        </a>
+    </div>
+
+    <hr>
+
     <form action="/" method="post">
         <h2>Match Details</h2>
 

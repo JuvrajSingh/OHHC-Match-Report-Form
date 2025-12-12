@@ -116,6 +116,16 @@ def autocomplete():
 
     return jsonify(matches[:10]) # limit autocomplete results to 10 names
 
+@app.route("/walkover", methods=["GET", "POST"])
+def walkover():
+    # If user submits form
+    if request.method == "POST":
+        # TO DO
+        return redirect(url_for("thanks"))
+    
+    # IF user opens form
+    return render_template("walkover.html", TEAMS=TEAMS, form={})
+
 @app.route("/thanks", methods=["GET", "POST"])
 def thanks():
     # If user clicks "Submit another match report form" button
