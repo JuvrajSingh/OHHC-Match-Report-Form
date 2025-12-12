@@ -1,17 +1,15 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Form
+    Walkover Form
+{% endblock %}
+
+{% block page_header %}
+    <h1>OHHC Match Report Form - WALKOVER</h1>
+    <p>Use this form to update the Club Statistics database. Only click submit once you've double checked all details are correct.</p>
 {% endblock %}
 
 {% block main %}
-    <h1>OHHC Match Report Form - WALKOVER</h1>
-    <p>Use this form to update the Club Statistics database. Only click submit once you've double checked all details are correct.</p>
-
-    {% if error %}<div class="error">{{ error }}</div>{% endif %}
-
-    <hr>
-
     <div>
         <p>This form is only for submitting a walkover result. If match was played, please submit full match report form</p>
         <a href="{{ url_for('index') }}">

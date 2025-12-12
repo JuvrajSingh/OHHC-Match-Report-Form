@@ -4,14 +4,12 @@
     Form
 {% endblock %}
 
-{% block main %}
+{% block page_header %}
     <h1>OHHC Match Report Form</h1>
     <p>Use this form to update the Club Statistics database. Only click submit once you've double checked all details are correct.</p>
+{% endblock %}
 
-    {% if error %}<div class="error">{{ error }}</div>{% endif %}
-
-    <hr>
-
+{% block main %}
     <div>
         <p>If match was not played due to either team forfeting, please submit walkover form instead</p>
         <a href="{{ url_for('walkover') }}">

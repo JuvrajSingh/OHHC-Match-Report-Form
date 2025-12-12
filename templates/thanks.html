@@ -4,12 +4,13 @@
     Submission Complete
 {% endblock %}
 
-{% block main %}
+{% block page_header %}
     <h1>Thank you</h1>
     <p>Form has been submitted and Club Statistics have updated</p>
-    <form action="/thanks" method="post">
-        <div class="form-field">
-            <button type="submit">Submit another match report form</button>
-        </div>
-    </form>
+{% endblock %}
+
+{% block main %}
+    <a href="{{ url_for('index') }}">
+        <button type="button">Submit another match report form</button>
+    </a>
 {% endblock %}

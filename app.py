@@ -146,12 +146,8 @@ def walkover():
     # IF user opens form
     return render_template("walkover.html", TEAMS=TEAMS, form={})
 
-@app.route("/thanks", methods=["GET", "POST"])
-def thanks():
-    # If user clicks "Submit another match report form" button
-    if request.method == "POST":
-        return redirect("/")
-    
+@app.route("/thanks")
+def thanks():    
     # If user reaches page by submitting match report form
     return render_template("thanks.html")
 
