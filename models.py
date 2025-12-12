@@ -25,3 +25,6 @@ def get_next_id(sheet, prefix: str, column: int=1, min_digits: int=4, counter: i
 
 def apology(message):
     return render_template("index.html", TEAMS=TEAMS, MAX_PLAYERS=MAX_PLAYERS, MIN_PLAYERS=MIN_PLAYERS, error=message, form=request.form)
+
+def apology_walkover(message):
+    return render_template("walkover.html", TEAMS=TEAMS, error=message, form=request.form)

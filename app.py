@@ -3,8 +3,8 @@ import gspread
 from google.oauth2.service_account import Credentials
 import os
 
-from models import get_next_id, apology
-from config import TEAMS, MAX_PLAYERS, MIN_PLAYERS
+from models import get_next_id, apology, apology_walkover
+from config import TEAMS, MAX_PLAYERS, MIN_PLAYERS, FORFEIT_RESULT
 
 app = Flask(__name__)
 
@@ -46,7 +46,8 @@ def index():
             if not column:
                 return apology(f"{error_text} is either blank or invalid")
         
-        matches_new_row = [match_id, match_date, team, opponent, venue, season, goals_for, goals_against]
+        walkover_true = "N"
+        matches_new_row = [match_id, match_date, team, opponent, venue, season, goals_for, goals_against, walkover_true]
 
         # Add a new row to the appearances sheet per player per match
         appearances_new_rows = []
@@ -120,7 +121,26 @@ def autocomplete():
 def walkover():
     # If user submits form
     if request.method == "POST":
-        # TO DO
+        match_id = get_next_id(matches_sheet, "M")
+        match_date = request.form.get("match_date")
+        team = request.form.get("team")
+        opponent = request.form.get("opponent", "").strip()
+        venue = request.form.get("venue")
+        season = "" # left empty so that arrayformula in this column works
+        goals_for = str(FORFEIT_RESULT) if request.form.get("forfeited") == "Opponent" else "0"
+        goals_against = str(FORFEIT_RESULT) if request.form.get("forfeited") == "OHHC" else "0"
+
+        matches_checks = [match_id, match_date, team, opponent, venue, goals_for, goals_against]
+        error_texts = ["Match ID", "Match date", "Team", "Opponent", "Venue", "Goals Scored", "Goals Conceded"]
+
+        for column, error_text in zip(matches_checks, error_texts):
+            if not column:
+                return apology_walkover(f"{error_text} is either blank or invalid")
+            
+        walkover_true = "Y"     
+        matches_new_row = [match_id, match_date, team, opponent, venue, season, goals_for, goals_against, walkover_true]
+        matches_sheet.append_row(matches_new_row, value_input_option="USER_ENTERED")
+
         return redirect(url_for("thanks"))
     
     # IF user opens form
