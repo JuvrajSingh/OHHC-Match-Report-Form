@@ -1,3 +1,7 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* responsive centred form container */
 .page-container {
     max-width: 600px;
